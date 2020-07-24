@@ -1,0 +1,17 @@
+language: generic
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - build docker -t sandeepb3245/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true sandeepb3245/react-test npm run test
+
+after_success:
+  - build docker -t sandeepb3245/muti-client -f ./client
+  - build docker -t sandeepb3245/muti-nginx -f ./nginx
+  - build docker -t sandeepb3245/muti-server -f ./server
+  - build docker -t sandeepb3245/muti-worker -f ./worker
