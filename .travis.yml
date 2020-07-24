@@ -11,7 +11,16 @@ script:
   - docker run -e CI=true sandeepb3245/react-test npm run test
 
 after_success:
-  - build docker -t sandeepb3245/muti-client -f ./client
-  - build docker -t sandeepb3245/muti-nginx -f ./nginx
-  - build docker -t sandeepb3245/muti-server -f ./server
-  - build docker -t sandeepb3245/muti-worker -f ./worker
+  - build docker -t sandeepb3245/multi-client -f ./client
+  - build docker -t sandeepb3245/multi-nginx -f ./nginx
+  - build docker -t sandeepb3245/multi-server -f ./server
+  - build docker -t sandeepb3245/multi-worker -f ./worker
+
+#log in to docker hub account to push the above prod build docker images
+- echo $DOCKER_PASSWORD | docker login -u $DOCKER_ID --password-stdin
+
+#now take the above images and push to dokcer hub repo
+- docker push sandeepb3245/multi-client
+- docker push sandeepb3245/multi-nginx
+- docker push sandeepb3245/multi-server
+- docker push sandeepb3245/multi-worker
