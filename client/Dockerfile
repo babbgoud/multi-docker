@@ -1,10 +1,14 @@
-FROM node:alpine
-WORKDIR '/app'
-COPY ./package.json ./app
-RUN npm install
-COPY . .
-RUN npm run build
+FROM node:alpine as builder
 
+WORKDIR '/app'
+
+COPY package.json /app
+
+RUN npm install
+
+COPY . /app
+
+RUN npm run build
 
 FROM nginx
 EXPOSE 3000
